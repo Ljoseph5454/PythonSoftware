@@ -3,7 +3,6 @@ import numpy as np
 import os, pickle
 import sys
 import pandas as pd
-
 df = pd.read_csv('Hit8.csv')
 print(df.head())
 

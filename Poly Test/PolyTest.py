@@ -4,10 +4,10 @@ import os, pickle
 import sys
 import pandas as pd
 
-df = pd.read_csv('EscapeData30.csv')
+df = pd.read_csv('Pos1.csv')
 print(df.head())
 
-side = -100
+side = 375.4
 
 hitx = df[df['z']==side]['x'].tolist()
 hity = df[df['z']==side]['y'].tolist()
