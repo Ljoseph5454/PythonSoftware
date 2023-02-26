@@ -5,7 +5,8 @@ import sys
 import pandas as pd
 np.set_printoptions(threshold=sys.maxsize)
 
-df = pd.read_csv('Informacion.csv')
+df = pd.read_csv('UpdatedSapphire.csv')
+#df = pd.read_csv('Informacion.csv')
 print(df.head())
 #df['Tnsmi'].plot(kind='hist');
 
