@@ -54,6 +54,7 @@ for i in range (len(nw[0])):
 #print(w)
 #print(n[1])
 #print(prob)
+plt.ylim([0,1])
 plt.plot(nw[1][1:],probw)
 plt.xlabel("Wavelength (nm)");
 plt.ylabel("Transmission Probability")
