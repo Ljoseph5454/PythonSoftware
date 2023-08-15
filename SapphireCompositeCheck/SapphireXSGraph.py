@@ -33,5 +33,4 @@ plt.title('Geant4 Sapphire Neutron Cross Section')
 plt.legend(loc="upper right", fontsize = 8)
 ax1.set_xscale('log')
 ax1.set_yscale('log')
-plt.rcParams['figure.dpi'] = 300
 #ax1.legend(loc="upper right")
