@@ -12,7 +12,7 @@ import os, pickle
 import sys
 import pandas as pd
 
-df = pd.read_csv('1eV.csv')
+df = pd.read_csv('10e-4eVLocal.csv')
 
 Hit = df['HasHit'].tolist()
 Pos = df['Pos'].tolist()

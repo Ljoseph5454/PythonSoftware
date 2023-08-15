@@ -12,7 +12,7 @@ import os, pickle
 import sys
 import pandas as pd
 
-df = pd.read_csv('1eVbragg0.csv')
+df = pd.read_csv('1MeV.csv')
 
 Hit = df['HasHit'].tolist()
 Pos = df['Pos'].tolist()
@@ -26,12 +26,16 @@ print(mfp_error)
 print("The mean free path is:", round(mfp,6), "cm")
 
 noc = 0
+noi = 0
 
 for i in range(len(Hit)):
     if (Hit[i] == 1):
         noc = noc + 1
+    if (Hit[i] == 2):
+        noi = noi + 1
         
 print("The number of captures is:", noc, "which gives a ratio of:", round(noc/100000, 6))
+print("The number of inelastic scatters is:", noc, "which gives a ratio of:", round(noi/100000, 6))
 
 nd_Al = 4.7253e+22
 nd_O = 7.0973e+22
@@ -43,4 +47,5 @@ print(sigma_error)
 
 print("The total cross section is:", 1/(mfp*nd), "cm^2, or, in barns it is:", (1/(mfp*nd))*1e+24, "b")
 print("The capture cross section is:", (noc/100000)*(1/(mfp*nd)), "cm^2, or, in barns it is:", (noc/100000)*(1/(mfp*nd))*1e+24, "b")
-print("The elastic cross section is:", (1-noc/100000)*(1/(mfp*nd)), "cm^2, or, in barns it is:", (1-noc/100000)*(1/(mfp*nd))*1e+24, "b")
+print("The inelastic cross section is:", (noi/100000)*(1/(mfp*nd)), "cm^2, or, in barns it is:", (noi/100000)*(1/(mfp*nd))*1e+24, "b")
+print("The elastic cross section is:", (1-(noc+noi)/100000)*(1/(mfp*nd)), "cm^2, or, in barns it is:", (1-(noc+noi)/100000)*(1/(mfp*nd))*1e+24, "b")

@@ -4,7 +4,7 @@ import os, pickle
 import sys
 import pandas as pd
 
-file = "10cm.csv"
+file = "30cm.csv"
 thickness = file[0:-4]
 print(thickness)
 df = pd.read_csv(file)
@@ -28,10 +28,10 @@ for i in range(len(Hittemp)):
     if Hittemp[i] == 1:
         KEe.append(KEetemp[i])
 
-for i in KEitemp:
-    if i != 0:
-        KEi.append(i)
-        Hit.append(Hittemp)        
+for i in range(len(KEitemp)):
+    if KEitemp[i] != 0:
+        KEi.append(KEitemp[i])
+        Hit.append(Hittemp[i]) 
 
 print(len(Hit))
 print(len(KEe))
@@ -76,11 +76,10 @@ ax1.legend(loc="upper right", fontsize = 8)
 ax1.set_xlabel('AMBE Neutron Energy (MeV)')
 ax1.set_ylabel('Number of Events')
 ax1.set_xscale('log')
-ax1.set_yscale('log')
+#ax1.set_yscale('log')
 ax1.set_title('Neutron Energy Spectrum of AMBE neutrons in a ' + thickness + ' HDPE box')
 fig1.canvas.draw()
 labels = [item.get_text() for item in ax1.get_xticklabels()]
 labels[2] = '$<10^{-6}$'
 ax1.set_xticklabels(labels)
-#ax1.set_yscale('log')
-ax1.legend(title='Ratio = ' + str(round(ratio,3)), loc='upper center')
+ax1.legend(title='Escape Ratio = ' + str(round(ratio,3)) + '\n' + 'Good/Bad Ratio = ' + str(round(len(KEunderthreshold)/len(KEoverthreshold),3)), loc='upper center')
