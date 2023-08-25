@@ -4,7 +4,21 @@ import os, pickle
 import sys
 import pandas as pd
 
-file = "30cm.csv"
+def my_div(dividend, divisor):
+    try:
+        return dividend/divisor
+    except ZeroDivisionError:
+        if dividend == 0:
+            raise ValueError('0/0 is undefined')
+            # instead of raising an error, an alternative
+            # is to return float('nan') as the result of 0/0
+
+        if dividend > 0:
+            return float('inf')
+        else:
+            return float('-inf')
+
+file = "Sapphire10cm20cmAmLi.csv"
 thickness = file[0:-4]
 print(thickness)
 df = pd.read_csv(file)
@@ -63,23 +77,23 @@ for i in KEe:
         
 print(len(KEunderthreshold))
 print(len(KEoverthreshold))
-        
 print('Out of the', len(KEe), '/', len(KEi), 'escapees:', len(KEthermal), 'were thermal (<1eV),', len(KEmedium), 'were medium (>1eV and <100keV), and', len(KEfast), 'were fast (>100keV)')
-print('So the ratio of thermal to fast is', round(len(KEthermal)/len(KEfast),3), 'and the ratio of thermal to non thermal is', round(len(KEthermal)/(len(KEfast)+len(KEmedium)),3))
-print('If neutrons <1keV will not produce events, then we get a good/bad neutron ratio of:', round(len(KEunderthreshold)/len(KEoverthreshold),3))
+print('So the ratio of thermal to fast is', round(my_div(len(KEthermal),len(KEfast)),3), 'and the ratio of thermal to non thermal is', round(my_div(len(KEthermal),(len(KEfast)+len(KEmedium))),3))
+print('If neutrons <1keV will not produce events, then we get a good/bad neutron ratio of:', round(my_div(len(KEunderthreshold),len(KEoverthreshold)),3))
 
 fig1, ax1 = plt.subplots()
 #ax1.hist(KEe, bins1, histtype = "step", label = "Escape")
-ax1.hist(np.clip(KEe, 0.000001, 10), bins, histtype = "step", label = "Escape")
-ax1.hist(np.clip(KEi, 0.000001, 10), bins, histtype = "step", label = "Initial")
+ax1.hist(np.clip(KEe, 0.000001, 10), bins1, histtype = "step", label = "Escape")
+ax1.hist(np.clip(KEi, 0.000001, 10), bins1, histtype = "step", label = "Initial")
 ax1.legend(loc="upper right", fontsize = 8)
 ax1.set_xlabel('AMBE Neutron Energy (MeV)')
 ax1.set_ylabel('Number of Events')
-#ax1.set_xscale('log')
-#ax1.set_yscale('log')
+ax1.set_xscale('log')
+ax1.set_yscale('log')
+plt.axvline(x = 0.001, color = 'red', linestyle = '--', alpha = 0.5, label = "Elastic Max")
 ax1.set_title('Neutron Energy Spectrum of AMBE neutrons in a ' + thickness + ' HDPE box')
 fig1.canvas.draw()
 labels = [item.get_text() for item in ax1.get_xticklabels()]
 labels[2] = '$<10^{-6}$'
 ax1.set_xticklabels(labels)
-ax1.legend(title='Escape Ratio = ' + str(round(ratio,3)) + '\n' + 'Good/Bad Ratio = ' + str(round(len(KEunderthreshold)/len(KEoverthreshold),3)), loc='upper center')
+ax1.legend(title='Escape Ratio = ' + str(round(ratio,3)) + '\n' + 'Good/Bad Ratio = ' + str(round(my_div(len(KEunderthreshold),len(KEoverthreshold)),3)), loc='upper right')

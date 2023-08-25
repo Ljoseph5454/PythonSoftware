@@ -68,11 +68,13 @@ for i in range (len(nw[0])):
 #print(w)
 #print(n[1])
 #print(prob)
-plt.ylim([0,1])
-plt.plot(nw[1][1:],probw)
-plt.xlabel("Wavelength (nm)");
-plt.ylabel("Transmission Probability")
-plt.title("Neutron Transmission through Sapphire Block")
+fig1, ax1 = plt.subplots()
+ax1.set_ylim([0,1])
+ax1.plot(nw[1][1:],probw)
+ax1.set_xlabel("Wavelength (nm)");
+ax1.set_ylabel("Transmission Probability")
+ax1.set_title("Neutron Transmission through Sapphire Block")
+#ax1.set_xscale('log')
 
 
 
