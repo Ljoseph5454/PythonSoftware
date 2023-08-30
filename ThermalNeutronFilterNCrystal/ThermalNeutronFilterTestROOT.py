@@ -18,14 +18,17 @@ def my_div(dividend, divisor):
             return float('inf')
         else:
             return float('-inf')
-
-file = "Sap5cmx10cm10cmAmLi.csv"
-thickness = file[0:-4]
+filename = "Sap5cmx7.5cm10cmPad10cmAmLi.root"
+file = uproot.open(filename)["tree"]
+print(file.keys())
+#print(file.keys())
+thickness = filename[0:-4]
 print(thickness)
-df = pd.read_csv(file)
+df = file.arrays(["Hit", "x", "y", "z", "KEinitial", "KEescape"], library="pd")
+#df = pd.read_csv(file)
 
-KEitemp = df['KE_i'].tolist()
-KEetemp = df['KE_e'].tolist()
+KEitemp = df['KEinitial'].tolist()
+KEetemp = df['KEescape'].tolist()
 Hittemp = df['Hit'].tolist()
 
 print(df.head())

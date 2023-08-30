@@ -21,6 +21,8 @@ KE = [i*1000000 for i in KE]
 print(len(Tot))
 print(len(hitx))
 #print(hitx)
+
+
 fig1, (ax1, ax2) = plt.subplots(nrows=1, ncols=2)
 counts, xedges, yedges, im = ax1.hist2d(hitx, hity, bins=(35, 35), cmap=plt.cm.inferno)
 cb1= fig1.colorbar(im, ax=ax1)
