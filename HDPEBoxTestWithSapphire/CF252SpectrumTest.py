@@ -34,11 +34,12 @@ values, bins, patches = plt.hist(KE, bins, histtype = "step")
 plt.xticks(np.arange(0, 10.5, 0.5))
 plt.tick_params(axis='x', labelrotation=60)
 plt.xlabel('CF252 Neutron Energy (MeV)')
-plt.ylabel('Number of Events')
-plt.title('CF252 Spectrum in Geant4')
+plt.ylabel('Relative Number')
+plt.title('CF252 Spectrum')
 ax.yaxis.set_major_formatter(formatter)
+plt.subplots_adjust(bottom=0.15)
 
-plt.yscale
+#plt.yscale
 plt.show()
 
 print(values)

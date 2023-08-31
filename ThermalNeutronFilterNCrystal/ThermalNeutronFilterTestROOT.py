@@ -18,7 +18,7 @@ def my_div(dividend, divisor):
             return float('inf')
         else:
             return float('-inf')
-filename = "Sap5cmx7.5cm10cmPad10cmAmLi.root"
+filename = "Data.root"
 file = uproot.open(filename)["tree"]
 print(file.keys())
 #print(file.keys())
@@ -89,15 +89,16 @@ fig1, ax1 = plt.subplots()
 #ax1.hist(KEe, bins1, histtype = "step", label = "Escape")
 ax1.hist(np.clip(KEe, 0.000001, 10), bins1, histtype = "step", label = "Escape")
 ax1.hist(np.clip(KEi, 0.000001, 10), bins1, histtype = "step", label = "Initial")
-ax1.legend(loc="upper right", fontsize = 8)
+ax1.legend(loc="upper left", fontsize = 8)
 ax1.set_xlabel('AMBE Neutron Energy (MeV)')
 ax1.set_ylabel('Number of Events')
 ax1.set_xscale('log')
 ax1.set_yscale('log')
 plt.axvline(x = 0.001, color = 'red', linestyle = '--', alpha = 0.5, label = "Elastic Max")
-ax1.set_title('Neutron Energy Spectrum of AMBE neutrons in a ' + thickness + ' HDPE box')
+ax1.set_title('Neutron Energy Spectrum of AmLi Neutrons')
+#ax1.set_title('Neutron Energy Spectrum of AMBE neutrons in a ' + thickness + ' HDPE box')
 fig1.canvas.draw()
 labels = [item.get_text() for item in ax1.get_xticklabels()]
 labels[2] = '$<10^{-6}$'
 ax1.set_xticklabels(labels)
-ax1.legend(title='Escape Ratio = ' + str(round(ratio,3)) + '\n' + 'Good/Bad Ratio = ' + str(round(my_div(len(KEunderthreshold),len(KEoverthreshold)),3)), loc='upper right')
+ax1.legend(title='Escape Ratio = ' + str(round(ratio,3)) + '\n' + 'Good/Bad Ratio = ' + str(round(my_div(len(KEunderthreshold),len(KEoverthreshold)),3)), loc='upper left')
