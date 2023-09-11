@@ -11,7 +11,7 @@ from mpl_toolkits.mplot3d import Axes3D
 import mpl_toolkits.mplot3d.art3d as art3d
 import uproot
 
-filename = "Data.root"
+filename = "Sap5cmx7.5cm10cmPad7.5cm25cmAmLi.root"
 file = uproot.open(filename)["tree"]
 df = file.arrays(["Hit", "x", "y", "z", "KEinitial", "KEescape"], library="pd")
 print(df.head())
@@ -52,8 +52,6 @@ KEescapetempface = [i*1000000 for i in KEescapetempface]
 HittempTNfilter = df[df['z'].between(zlengthface-Pad, zlengthface) & df['x'].between(-25, 25) & df['y'].between(-25, 25) & df['KEescape'].between(0,0.001)]['Hit'].tolist()
 hitztempTNfilter = df[df['z'].between(zlengthface-Pad, zlengthface) & df['x'].between(-25, 25) & df['y'].between(-25, 25) & df['KEescape'].between(0,0.001)]['z'].tolist()
 
-print(hitztempTNfilter)
-
 #print(hitztempface)
 
 KEescape = []
@@ -82,6 +80,8 @@ for i in range(len(Hittempface)):
 for i in range(len(HittempTNfilter)):
     if HittempTNfilter[i] == 1:
         hitzTNfilter.append(hitztempTNfilter[i])
+        
+print(len(hitz))
 
 hitz = [i-center1 for i in hitz] #Shifting z values for better alignment
 hitzface = [i-center1 for i in hitzface] #Shifting z values for better alignment
