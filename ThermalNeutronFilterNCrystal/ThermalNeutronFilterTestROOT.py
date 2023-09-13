@@ -7,6 +7,19 @@ import uproot
 #from matplotlib.ticker import (LogLocator, MultipleLocator, AutoMinorLocator)
 import matplotlib.ticker as ticker
 
+S_l = 7.5*10
+S_w = 5*10
+V_l = 3*10
+P_w = 25*10
+P_l = 10*10
+Pad = 7.5*10
+P_p = (S_l+P_l)+Pad
+center = 0
+center1 = 0.5*(P_p-P_w) #use to shift the center (Geant4 center is shifted for macro use)
+print(center1)
+xylength = P_w
+zlengthface = 0.5*(P_w+V_l+P_p)+center
+zlengthback = -0.5*(P_w+V_l+P_p)+center
 
 def my_div(dividend, divisor):
     try:
@@ -22,6 +35,7 @@ def my_div(dividend, divisor):
         else:
             return float('-inf')
 filename = "Sap5cmx7.5cm10cmPad7.5cm25cmAmLi.root"
+faceonly = True
 file = uproot.open(filename)["tree"]
 print(file.keys())
 #print(file.keys())
@@ -30,29 +44,24 @@ print(thickness)
 df = file.arrays(["Hit", "x", "y", "z", "KEinitial", "KEescape"], library="pd")
 #df = pd.read_csv(file)
 
-KEitemp = df['KEinitial'].tolist()
-KEetemp = df['KEescape'].tolist()
-Hittemp = df['Hit'].tolist()
+KEi = df['KEinitial'].tolist()
+Hit = df['Hit'].tolist()
+
+if faceonly == True:
+    KEe = df[df['z'].between(zlengthface-Pad, zlengthface) & df['x'].between(-xylength, xylength, inclusive='neither') & df['y'].between(-xylength, xylength, inclusive='neither')]['KEescape'].tolist()
+else:
+    KEetemp = df['KEescape'].tolist()
+
+#print(KEe)
 
 print(df.head())
 
-n = 0
-for i in KEitemp:
-    if i == 0:
-        n+=1
-print(n)
 
-KEe = []
-KEi = []
-Hit = []
-for i in range(len(Hittemp)):
-    if Hittemp[i] == 1:
-        KEe.append(KEetemp[i])
-
-for i in range(len(KEitemp)):
-    if KEitemp[i] != 0:
-        KEi.append(KEitemp[i])
-        Hit.append(Hittemp[i]) 
+if faceonly == False:
+    KEe = []        
+    for i in range(len(KEetemp)):
+        if KEetemp[i] > 0:
+            KEe.append(KEetemp[i])
 
 print(len(Hit))
 print(len(KEe))
@@ -65,7 +74,7 @@ bottombin = 1e-9
 bins = np.linspace(0,10.2,52)
 bins1=np.logspace(np.log10(bottombin),np.log10(10), 100)
 print(bins1)
-print(max(KEitemp))
+print(max(KEi))
 print(min(KEi))
 
 KEthermal = []
@@ -112,7 +121,7 @@ fig1.canvas.draw()
 ax1.set_xlim(bottombin/2, 10)
 ax1.xaxis.set_ticks(np.logspace(np.log10(bottombin), 1, num=1-int(np.log10(bottombin))+1))
 labels = [item.get_text() for item in ax1.get_xticklabels()]
-print(labels)
+#print(labels)
 #labels[2] = '$<10^{-7}$'
 #ax1.set_xticklabels(labels)
 #ax1.xaxis.set_major_locator(ticker.LogLocator(base=10.0, numticks=8))

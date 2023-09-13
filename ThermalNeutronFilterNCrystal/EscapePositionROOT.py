@@ -52,6 +52,7 @@ KEescapetempface = [i*1000000 for i in KEescapetempface]
 HittempTNfilter = df[df['z'].between(zlengthface-Pad, zlengthface) & df['x'].between(-25, 25) & df['y'].between(-25, 25) & df['KEescape'].between(0,0.001)]['Hit'].tolist()
 hitztempTNfilter = df[df['z'].between(zlengthface-Pad, zlengthface) & df['x'].between(-25, 25) & df['y'].between(-25, 25) & df['KEescape'].between(0,0.001)]['z'].tolist()
 
+print(len(hitztempface))
 #print(hitztempface)
 
 KEescape = []
