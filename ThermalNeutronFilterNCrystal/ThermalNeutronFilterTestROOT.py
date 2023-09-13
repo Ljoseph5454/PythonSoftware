@@ -4,6 +4,7 @@ import os, pickle
 import sys
 import pandas as pd
 import uproot
+import math
 #from matplotlib.ticker import (LogLocator, MultipleLocator, AutoMinorLocator)
 import matplotlib.ticker as ticker
 
@@ -11,7 +12,7 @@ S_l = 7.5*10
 S_w = 5*10
 V_l = 3*10
 P_w = 25*10
-P_l = 10*10
+P_l = 5*10
 Pad = 7.5*10
 P_p = (S_l+P_l)+Pad
 center = 0
@@ -34,25 +35,33 @@ def my_div(dividend, divisor):
             return float('inf')
         else:
             return float('-inf')
-filename = "Sap5cmx7.5cm10cmPad7.5cm25cmAmLi.root"
-faceonly = True
+filename = "Sap5cmx7.5cm5cmPad7.5cm25cmAmLi.root"
+faceonly = True # Only check data points that leave the face of the filter
 file = uproot.open(filename)["tree"]
 print(file.keys())
 #print(file.keys())
 thickness = filename[0:-4]
 print(thickness)
-df = file.arrays(["Hit", "x", "y", "z", "KEinitial", "KEescape"], library="pd")
+df = file.arrays(["Hit", "x", "y", "z", "KEinitial", "KEescape", "px", "py", "pz"], library="pd")
 #df = pd.read_csv(file)
 
 KEi = df['KEinitial'].tolist()
 Hit = df['Hit'].tolist()
 
 if faceonly == True:
-    KEe = df[df['z'].between(zlengthface-Pad, zlengthface) & df['x'].between(-xylength, xylength, inclusive='neither') & df['y'].between(-xylength, xylength, inclusive='neither')]['KEescape'].tolist()
+    KEe = df[df['z'].between(zlengthface+center1-Pad, zlengthface+center1) & df['x'].between(-xylength, xylength, inclusive='neither') & df['y'].between(-xylength, xylength, inclusive='neither')]['KEescape'].tolist()
+    px = df[df['z'].between(zlengthface+center1-Pad, zlengthface+center1) & df['x'].between(-xylength, xylength, inclusive='neither') & df['y'].between(-xylength, xylength, inclusive='neither')]['px'].tolist()
+    py = df[df['z'].between(zlengthface+center1-Pad, zlengthface+center1) & df['x'].between(-xylength, xylength, inclusive='neither') & df['y'].between(-xylength, xylength, inclusive='neither')]['py'].tolist()
+    pz = df[df['z'].between(zlengthface+center1-Pad, zlengthface+center1) & df['x'].between(-xylength, xylength, inclusive='neither') & df['y'].between(-xylength, xylength, inclusive='neither')]['pz'].tolist()
+    momdir = list(zip(px,py,pz))
+    theta = [np.arccos(i[2]/np.sqrt(i[0]**2 + i[1]**2 + i[2]**2)) for i in momdir]
+    phi = [np.arctan2(i[1],i[0]) for i in momdir]
 else:
     KEetemp = df['KEescape'].tolist()
+    
+print(phi)
 
-#print(KEe)
+
 
 print(df.head())
 
@@ -72,8 +81,11 @@ ratio = len(KEe)/len(Hit)
 bottombin = 1e-9
 
 bins = np.linspace(0,10.2,52)
+if faceonly == True:
+    thetabins = np.linspace(0,np.pi,50)
+    phibins = np.linspace(-np.pi,np.pi,100)
 bins1=np.logspace(np.log10(bottombin),np.log10(10), 100)
-print(bins1)
+#print(bins1)
 print(max(KEi))
 print(min(KEi))
 
@@ -131,4 +143,14 @@ labels = [item.get_text() for item in ax1.get_xticklabels()]
 ax1.xaxis.set_major_locator(ticker.LogLocator(numticks=999))
 ax1.xaxis.set_minor_locator(ticker.LogLocator(numticks=999, subs="auto"))
 ax1.legend(title='Escape Ratio = ' + str(round(ratio,3)) + '\n' + 'Good/Bad Ratio = ' + str(round(my_div(len(KEunderthreshold),len(KEoverthreshold)),3)), loc='upper left')
-#plt.show()
+plt.show()
+
+if faceonly == True:
+    fig1, (ax1, ax2) = plt.subplots(nrows=1, ncols=2)
+    ax1.hist(theta, thetabins, histtype = "step", label = "Theta")
+    ax1.set_xlim([0, np.pi/2])
+    ax1.set_xlabel('theta (rad)')
+    ax2.hist(phi, phibins, histtype = "step", label = "Phi")
+    ax2.set_xlim([-np.pi, np.pi])
+    ax2.set_xlabel('phi (rad)')
+    fig1.suptitle('Angular Distribution of Escaping Neutrons')
