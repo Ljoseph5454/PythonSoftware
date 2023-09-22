@@ -11,7 +11,7 @@ from mpl_toolkits.mplot3d import Axes3D
 import mpl_toolkits.mplot3d.art3d as art3d
 import uproot
 
-filename = "Sap5cmx7.5cm5cmPad7.5cm25cmAmLi.root"
+filename = "Sap5cmx7.5cm1cmPad10cm25cmAmLiBig.root"
 file = uproot.open(filename)["tree"]
 df = file.arrays(["Hit", "x", "y", "z", "KEinitial", "KEescape"], library="pd")
 print(df.head())
@@ -20,8 +20,8 @@ S_l = 7.5*10
 S_w = 5*10
 V_l = 3*10
 P_w = 25*10
-P_l = 5*10
-Pad = 7.5*10
+P_l = 1*10
+Pad = 10*10
 P_p = (S_l+P_l)+Pad
 center = 0
 center1 = 0.5*(P_p-P_w) #use to shift the center (Geant4 center is shifted for macro use)
@@ -86,12 +86,12 @@ for i in range(len(HittempTNfilter)):
 hitz = [i-center1 for i in hitz] #Shifting z values for better alignment
 hitzface = [i-center1 for i in hitzface] #Shifting z values for better alignment
 
-print(hitz)
+print(len(hitz))
 print(min(hitzface))
 print(max(hitx))
 
 print("The number of neutrons that escaped through the face is ", len(hitztempface))
-print("The number of neutrons that escaped through the filter is ", len(hitztempTNfilter))
+print("The number of thermal neutrons that escaped through the filter is ", len(hitztempTNfilter))
 
 fig1, (ax1, ax2) = plt.subplots(nrows=1, ncols=2)
 ax1.set_facecolor('black')
