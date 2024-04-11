@@ -8,11 +8,11 @@ import math
 #from matplotlib.ticker import (LogLocator, MultipleLocator, AutoMinorLocator)
 import matplotlib.ticker as ticker
 
-S_l = 7.5*10
+S_l = 10*10
 S_w = 5*10
 V_l = 3*10
 P_w = 25*10
-P_l = 3*10
+P_l = 10*10
 Pad = 10*10
 P_p = (S_l+P_l)+Pad
 center = 0
@@ -35,9 +35,9 @@ def my_div(dividend, divisor):
             return float('inf')
         else:
             return float('-inf')
-filename = "Sap5cmx7.5cm3cmPad10cm25cmAmLiBig.root"
+filename = "Sap5cmx10cm10cmPad5cm25cm2.4MeVSource.root"
 faceonly = True # Only check data points that leave the face of the filter
-printdat = True # Set to true if you want text file output for histograms
+printdat = False # Set to true if you want text file output for histograms
 file = uproot.open(filename)["tree"]
 print(file.keys())
 #print(file.keys())
@@ -49,11 +49,13 @@ df = file.arrays(["Hit", "x", "y", "z", "KEinitial", "KEescape", "px", "py", "pz
 KEi = df['KEinitial'].tolist()
 Hit = df['Hit'].tolist()
 
+boundary = xylength
+
 if faceonly == True:
-    KEe = df[df['z'].between(zlengthface+center1-Pad, zlengthface+center1) & df['x'].between(-xylength, xylength, inclusive='neither') & df['y'].between(-xylength, xylength, inclusive='neither')]['KEescape'].tolist()
-    px = df[df['z'].between(zlengthface+center1-Pad, zlengthface+center1) & df['x'].between(-xylength, xylength, inclusive='neither') & df['y'].between(-xylength, xylength, inclusive='neither')]['px'].tolist()
-    py = df[df['z'].between(zlengthface+center1-Pad, zlengthface+center1) & df['x'].between(-xylength, xylength, inclusive='neither') & df['y'].between(-xylength, xylength, inclusive='neither')]['py'].tolist()
-    pz = df[df['z'].between(zlengthface+center1-Pad, zlengthface+center1) & df['x'].between(-xylength, xylength, inclusive='neither') & df['y'].between(-xylength, xylength, inclusive='neither')]['pz'].tolist()
+    KEe = df[df['z'].between(zlengthface+center1-Pad, zlengthface+center1) & df['x'].between(-boundary, boundary, inclusive='neither') & df['y'].between(-boundary, boundary, inclusive='neither')]['KEescape'].tolist()
+    px = df[df['z'].between(zlengthface+center1-Pad, zlengthface+center1) & df['x'].between(-boundary, boundary, inclusive='neither') & df['y'].between(-boundary, boundary, inclusive='neither')]['px'].tolist()
+    py = df[df['z'].between(zlengthface+center1-Pad, zlengthface+center1) & df['x'].between(-boundary, boundary, inclusive='neither') & df['y'].between(-boundary, boundary, inclusive='neither')]['py'].tolist()
+    pz = df[df['z'].between(zlengthface+center1-Pad, zlengthface+center1) & df['x'].between(-boundary, boundary, inclusive='neither') & df['y'].between(-boundary, boundary, inclusive='neither')]['pz'].tolist()
     momdir = list(zip(px,py,pz))
     theta = [np.arccos(i[2]/np.sqrt(i[0]**2 + i[1]**2 + i[2]**2)) for i in momdir]
     phi = [np.arctan2(i[1],i[0]) for i in momdir]
@@ -173,6 +175,7 @@ if faceonly == True:
     ax2.set_xlabel('phi (rad)')
     fig1.suptitle('Angular Distribution of Escaping Neutrons')
     if printdat == True:
-        dfsavetheta = pd.DataFrame({'gpspoint':gpspointtheta, 'x_lower':[np.pi-i for i in b[1][1:]], 'y': b[0]}) #Invert theta cuz Geant4 GPS is backwards
+        dfsavetheta = pd.DataFrame({'gpspoint':gpspointtheta, 'x_lower':[i for i in b[1][1:]], 'y': b[0]}) #Invert theta cuz Geant4 GPS is backwards
+        # dfsavetheta = pd.DataFrame({'gpspoint':gpspointtheta, 'x_lower':[np.pi-i for i in b[1][1:]], 'y': b[0]}) #Invert theta cuz Geant4 GPS is backwards
         print(dfsavetheta.head())
         dfsavetheta.to_csv(savepath + '/' + filename[0:-5]+'theta.txt', index = False, sep=' ')

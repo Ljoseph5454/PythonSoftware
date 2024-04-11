@@ -11,17 +11,17 @@ from mpl_toolkits.mplot3d import Axes3D
 import mpl_toolkits.mplot3d.art3d as art3d
 import uproot
 
-filename = "Sap5cmx7.5cm1cmPad10cm25cmAmLiBig.root"
+filename = "Sap5cmx10cm10cmPad5cm25cm2.4MeVSource.root"
 file = uproot.open(filename)["tree"]
 df = file.arrays(["Hit", "x", "y", "z", "KEinitial", "KEescape"], library="pd")
 print(df.head())
 
-S_l = 7.5*10
+S_l = 10*10
 S_w = 5*10
 V_l = 3*10
 P_w = 25*10
-P_l = 1*10
-Pad = 10*10
+P_l = 10*10
+Pad = 5*10
 P_p = (S_l+P_l)+Pad
 center = 0
 center1 = 0.5*(P_p-P_w) #use to shift the center (Geant4 center is shifted for macro use)
@@ -40,12 +40,14 @@ hitztemp = df['z'].tolist()
 KEescapetemp = [i*1000000 for i in KEescapetemp]
 print(zlengthface-Pad)
 
-KEescapetempface = df[df['z'].between(zlengthface+center1-Pad, zlengthface+center1) & df['x'].between(-xylength, xylength, inclusive='neither') & df['y'].between(-xylength, xylength, inclusive='neither')]['KEescape'].tolist()
-Hittempface = df[df['z'].between(zlengthface+center1-Pad, zlengthface+center1) & df['x'].between(-xylength, xylength, inclusive='neither') & df['y'].between(-xylength, xylength, inclusive='neither')]['Hit'].tolist()
+boundary = 25 #xylength #25
+
+KEescapetempface = df[df['z'].between(zlengthface+center1-Pad, zlengthface+center1) & df['x'].between(-boundary, boundary, inclusive='neither') & df['y'].between(-boundary, boundary, inclusive='neither')]['KEescape'].tolist()
+Hittempface = df[df['z'].between(zlengthface+center1-Pad, zlengthface+center1) & df['x'].between(-boundary, boundary, inclusive='neither') & df['y'].between(-boundary, boundary, inclusive='neither')]['Hit'].tolist()
 #Hittemp1 = df[df['Hit']==1]['Hit'].tolist()
-hitxtempface = df[df['z'].between(zlengthface+center1-Pad, zlengthface+center1) & df['x'].between(-xylength, xylength, inclusive='neither') & df['y'].between(-xylength, xylength, inclusive='neither')]['x'].tolist()
-hitytempface = df[df['z'].between(zlengthface+center1-Pad, zlengthface+center1) & df['x'].between(-xylength, xylength, inclusive='neither') & df['y'].between(-xylength, xylength, inclusive='neither')]['y'].tolist()
-hitztempface = df[df['z'].between(zlengthface+center1-Pad, zlengthface+center1) & df['x'].between(-xylength, xylength, inclusive='neither') & df['y'].between(-xylength, xylength, inclusive='neither')]['z'].tolist()
+hitxtempface = df[df['z'].between(zlengthface+center1-Pad, zlengthface+center1) & df['x'].between(-boundary, boundary, inclusive='neither') & df['y'].between(-boundary, boundary, inclusive='neither')]['x'].tolist()
+hitytempface = df[df['z'].between(zlengthface+center1-Pad, zlengthface+center1) & df['x'].between(-boundary, boundary, inclusive='neither') & df['y'].between(-boundary, boundary, inclusive='neither')]['y'].tolist()
+hitztempface = df[df['z'].between(zlengthface+center1-Pad, zlengthface+center1) & df['x'].between(-boundary, boundary, inclusive='neither') & df['y'].between(-boundary, boundary, inclusive='neither')]['z'].tolist()
 KEescapetempface = [i*1000000 for i in KEescapetempface]
 
 #Number of thermal neutrons coming out of filter
