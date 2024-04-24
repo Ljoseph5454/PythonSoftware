@@ -8,12 +8,12 @@ import math
 #from matplotlib.ticker import (LogLocator, MultipleLocator, AutoMinorLocator)
 import matplotlib.ticker as ticker
 
-S_l = 10*10
+S_l = 7.5*10
 S_w = 5*10
 V_l = 3*10
 P_w = 25*10
-P_l = 10*10
-Pad = 10*10
+P_l = 3*10
+Pad = 7.5*10
 P_p = (S_l+P_l)+Pad
 center = 0
 center1 = 0.5*(P_p-P_w) #use to shift the center (Geant4 center is shifted for macro use)
@@ -35,7 +35,7 @@ def my_div(dividend, divisor):
             return float('inf')
         else:
             return float('-inf')
-filename = "Sap5cmx10cm10cmPad5cm25cm2.4MeVSource.root"
+filename = "Sap5cmx7.5cm3cmPad7.5cm25cmAmLiBig.root"
 faceonly = True # Only check data points that leave the face of the filter
 printdat = False # Set to true if you want text file output for histograms
 file = uproot.open(filename)["tree"]

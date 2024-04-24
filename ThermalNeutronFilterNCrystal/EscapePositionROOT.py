@@ -11,17 +11,17 @@ from mpl_toolkits.mplot3d import Axes3D
 import mpl_toolkits.mplot3d.art3d as art3d
 import uproot
 
-filename = "Sap5cmx10cm10cmPad5cm25cm2.4MeVSource.root"
+filename = "Sap5cmx7.5cm3cmPad10cm25cmAmLiBig.root"
 file = uproot.open(filename)["tree"]
 df = file.arrays(["Hit", "x", "y", "z", "KEinitial", "KEescape"], library="pd")
 print(df.head())
 
-S_l = 10*10
+S_l = 7.5*10
 S_w = 5*10
 V_l = 3*10
 P_w = 25*10
-P_l = 10*10
-Pad = 5*10
+P_l = 3*10
+Pad = 10*10
 P_p = (S_l+P_l)+Pad
 center = 0
 center1 = 0.5*(P_p-P_w) #use to shift the center (Geant4 center is shifted for macro use)
