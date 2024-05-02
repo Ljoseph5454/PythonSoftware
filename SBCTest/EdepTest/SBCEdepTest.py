@@ -18,6 +18,8 @@ EDep = [i*10**6 for i in EDep]
 #print(EDep)
 EventNo = df['EventNo'].tolist()
 
+threshold = 1000
+
 #print(EventNo)
 
 OverThresholdScatters = []
@@ -25,7 +27,7 @@ ElasticTot = []
 
 n=0
 for i in EDep: #Creates a 2d list with event no. and EDep only if EDep of the scatter > 1keV
-    if i > 1000:
+    if i > threshold:
         OverThresholdScatters.append([EventNo[n],i])
     n+=1
 

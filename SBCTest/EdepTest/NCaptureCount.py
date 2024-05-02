@@ -78,6 +78,7 @@ for i in TotalCompt:
         LArScatterandComptEventNo.append(index)
         
 print(LArScatterandComptEventNo)
+print(len(LArScatterandComptEventNo))
 print(CapVolume)
 print(len(Elastic))
 print("# of captures after a scatter in LAr", ElCapTot)
